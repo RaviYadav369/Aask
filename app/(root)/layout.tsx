@@ -1,6 +1,5 @@
 import Navbar from "@/components/shared/Navbar";
 import React from "react" ;
-import "../globals.css";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -13,6 +12,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
         </section>
         {/* Right Section */}
       </div>
+        
     </main>
   );
 };

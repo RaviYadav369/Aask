@@ -9,20 +9,25 @@ interface ThemeProviderProps {
 const ThemeContext = createContext<ThemeProviderProps | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [mode, setmode] = useState("dark");
+  const [mode, setmode] = useState("");
 
   const handleThemeChange = () => {
-    if (mode === "dark") {
-      setmode("light");
-      document.documentElement.classList.add("light");
-    } else {
+    if (
+      localStorage.theme === "dark" ||
+      (!("theme" in localStorage) &&
+        window.matchMedia("(prefers-color-scheme:dark)").matches)
+    ) {
       setmode("dark");
+      document.documentElement.classList.add("dark");
+    } else {
+      setmode("light");
       document.documentElement.classList.remove("dark");
     }
   };
-//   useEffect(() => {
-//     handleThemeChange();
-//   }, [mode]);
+  useEffect(() => {``
+    handleThemeChange();
+  }, [mode]);
+  console.log(mode); 
 
   return (
     <ThemeContext.Provider value={{ mode, setmode }}>
