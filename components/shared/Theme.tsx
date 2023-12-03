@@ -15,7 +15,6 @@ import Image from "next/image";
 import { themes } from "@/constants";
 const Theme = () => {
   const { mode, setmode } = useTheme();
-  console.log(mode);
   
   return (
     <div className="relative border-none shadow-none bg-transparent">

@@ -24,10 +24,9 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
       document.documentElement.classList.remove("dark");
     }
   };
-  useEffect(() => {``
+  useEffect(() => {
     handleThemeChange();
   }, [mode]);
-  console.log(mode); 
 
   return (
     <ThemeContext.Provider value={{ mode, setmode }}>
