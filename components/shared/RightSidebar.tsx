@@ -5,20 +5,20 @@ import Tags from "./Tags";
 
 const RightSidebar = () => {
   const hotQuestions = [
-    { _id: 1, title: "how do I use express as a custom server in nextjs" },
-    { _id: 2, title: "how do I use express as a custom server in nextjs" },
-    { _id: 3, title: "how do I use express as a custom server in nextjs" },
-    { _id: 4, title: "how do I use express as a custom server in nextjs" },
-    { _id: 5, title: "how do I use express as a custom server in nextjs" },
+    { _id: "1", title: "how do I use express as a custom server in nextjs" },
+    { _id: "2", title: "how do I use express as a custom server in nextjs" },
+    { _id: "3", title: "how do I use express as a custom server in nextjs" },
+    { _id: "4", title: "how do I use express as a custom server in nextjs" },
+    { _id: "5", title: "how do I use express as a custom server in nextjs" },
   ];
 
   const tags = [
-    { _id: 1, name: "javascript", totalQuestions: 5 },
-    { _id: 2, name: "HTML", totalQuestions: 5 },
-    { _id: 3, name: "CSS", totalQuestions: 5 },
-    { _id: 4, name: "Nodejs", totalQuestions: 5 },
-    { _id: 5, name: "Nextjs", totalQuestions: 5 },
-    { _id: 6, name: "React", totalQuestions: 5 },
+    { _id: '1', name: "javascript", totalQuestions: 5 },
+    { _id: '2', name: "HTML", totalQuestions: 5 },
+    { _id: '3', name: "CSS", totalQuestions: 5 },
+    { _id: '4', name: "Nodejs", totalQuestions: 5 },
+    { _id: '5', name: "Nextjs", totalQuestions: 5 },
+    { _id: '6', name: "React", totalQuestions: 5 },
   ];
 
   return (
