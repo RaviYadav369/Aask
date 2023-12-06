@@ -19,6 +19,8 @@ import { Input } from "@/components/ui/input";
 import { questionSchema } from "@/lib/validations";
 import { Badge } from "../ui/badge";
 import Image from "next/image";
+import { create } from "domain";
+import { createQuestion } from "@/lib/actions/question.action";
 
 const type:any = "edit";
 
@@ -34,10 +36,10 @@ const Question = () => {
       tags: [],
     },
   });
-  function onSubmit(values: z.infer<typeof questionSchema>) {
+ async function onSubmit(values: z.infer<typeof questionSchema>) {
     setisSubmitting(true);
     try {
-      
+     await createQuestion(values)
     } catch (error) {
       
     }
@@ -46,6 +48,7 @@ const Question = () => {
     }
     console.log(values);
   }
+  
 
   const handleInputKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
@@ -126,6 +129,8 @@ const Question = () => {
                       editorRef.current = editor;
                     }}
                     initialValue=""
+                    onBlur={field.onBlur}
+                    onEditorChange={(content)=>field.onChange(content)}
                     init={{
                       height: 350,
                       menubar: false,
