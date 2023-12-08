@@ -5,47 +5,53 @@ import NoResult from "@/components/shared/NoResult";
 import LocalSearch from "@/components/shared/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import { HomePageFilters } from "@/constants/filters";
+import { getAllQuestions } from "@/lib/actions/question.action";
 import Link from "next/link";
+import { useEffect,useState } from "react";
 
-const questions = [
-  {
-    _id: "1",
-    title: 'Sample Title 1',
-    tags: [
-      { _id: '101', name: 'Tag 1' },
-      { _id: '102', name: 'Tag 2' },
-    ],
-    author: {
-      _id: 'abc123',
-      name: 'John Doe',
-      picture: 'https://example.com/picture1.jpg',
-    },
-    upvotes: 150052,
-    viewed: 1003500,
-    answers: [],
-    createdAt:new Date('2023-01-15T10:30:00Z'),
-  },
-  {
-    _id: '2',
-    title: 'Another Title',
-    tags: [
-      { _id: '103', name: 'Tag 3' },
-      { _id: '104', name: 'Tag 4' },
-    ],
-    author: {
-      _id: 'def456',
-      name: 'Jane Smith',
-      picture: 'https://example.com/picture2.jpg',
-    },
-    upvotes: 1080000,
-    viewed: 7000005,
-    answers: [
+// const questions = [
+//   {
+//     _id: "1",
+//     title: 'Sample Title 1',
+//     tags: [
+//       { _id: '101', name: 'Tag 1' },
+//       { _id: '102', name: 'Tag 2' },
+//     ],
+//     author: {
+//       _id: 'abc123',
+//       name: 'John Doe',
+//       picture: 'https://example.com/picture1.jpg',
+//     },
+//     upvotes: 150052,
+//     viewed: 1003500,
+//     answers: [],
+//     createdAt:new Date('2023-01-15T10:30:00Z'),
+//   },
+//   {
+//     _id: '2',
+//     title: 'Another Title',
+//     tags: [
+//       { _id: '103', name: 'Tag 3' },
+//       { _id: '104', name: 'Tag 4' },
+//     ],
+//     author: {
+//       _id: 'def456',
+//       name: 'Jane Smith',
+//       picture: 'https://example.com/picture2.jpg',
+//     },
+//     upvotes: 1080000,
+//     viewed: 7000005,
+//     answers: [
     
-    ],
-    createdAt:new Date('2022-03-20T15:45:00Z'),
-  },
-];
-export default function Home() {
+//     ],
+//     createdAt:new Date('2022-03-20T15:45:00Z'),
+//   },
+// ];
+export  default async function Home() {
+  const result = await getAllQuestions({})
+  // console.log(result?.questions)
+  
+
   return (
     <>
       <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -72,16 +78,16 @@ export default function Home() {
       </div>
       <HomeFilter />
       <div className="mt-10 flex w-full flex-col gap-6">
-        {questions.length > 0
-          ? questions.map((question) => (
+        {result?.questions?.length ?
+         result?.questions.map((question) => (
             <QuestionCard
             key={question._id}
             _id={question._id}
             title={question.title}
             tags={question.tags}
             author={question.author}
-            upvotes={question.upvotes}
-            viewed={question.viewed}
+            upvotes={question.upvotes.length}
+            views={question.views}
             answers={question.answers}
             createdAt={question.createdAt}
 

@@ -36,7 +36,7 @@ export const getTimeStamp = (createdAt: Date): string => {
 };
 
 
-export const formatNumber = (n: number): string => {
+export const formatNumber = (n: number): string => {  
   if (n >= 1e6) {
     return (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
   } else if (n >= 1e3) {
