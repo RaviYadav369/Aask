@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { HomePageFilters } from "@/constants/filters";
 import { getAllQuestions } from "@/lib/actions/question.action";
 import Link from "next/link";
-import { useEffect,useState } from "react";
 
 // const questions = [
 //   {
