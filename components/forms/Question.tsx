@@ -1,3 +1,5 @@
+/* eslint-disable tailwindcss/no-custom-classname */
+/* eslint-disable tailwindcss/classnames-order */
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -109,7 +111,7 @@ const Question = ({mongoUserId}:Props) => {
             render={({ field }) => (
               <FormItem className="flex w-full flex-col ">
                 <FormLabel className="paragraph-semibold text-dark400_light800">
-                  Question Title <span className="text-primary-500">*</span>{" "}
+                  Question Title <span className="text-primary-500">*</span>
                 </FormLabel>
                 <FormControl className="mt-3.5">
                   <Input
@@ -131,7 +133,7 @@ const Question = ({mongoUserId}:Props) => {
             name="explanation"
             render={({ field }) => (
               <FormItem className="flex w-full flex-col gap-3">
-                <FormLabel className="paragraph-semibold text-dark400_light800">
+                <FormLabel className="paragraph-semibold background-light900_dark300 text-dark400_light800">
                   Detailed explanation of your problem{" "}
                   <span className="text-primary-500">*</span>{" "}
                 </FormLabel>
@@ -139,7 +141,7 @@ const Question = ({mongoUserId}:Props) => {
                   <Editor
                     apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}
                     onInit={(evt, editor) => {
-                      //@ts-ignore
+                      // @ts-ignore 
                       editorRef.current = editor;
                     }}
                     initialValue=""
@@ -170,7 +172,7 @@ const Question = ({mongoUserId}:Props) => {
                         "codesample | bold italic forecolor | alignleft aligncenter " +
                         "alignright alignjustify | bullist numlist | ",
                       content_style:
-                        "body { font-family:Helvetica,Arial,sans-serif; font-size:16px }",
+                        "body { font-family:Helvetica,Arial,sans-serif; font-size:16px } background-light900_dark300",
                     }}
                   />
                 </FormControl>

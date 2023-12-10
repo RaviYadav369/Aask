@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { ClerkProvider } from "@clerk/nextjs";
 import React from "react";
 import "./globals.css";
@@ -36,7 +37,7 @@ export default function RootLayout({
           appearance={{
             elements: {
               formButtonPrimary: "primary-gradient",
-              footerActionLink: "primary-text-gradient hover:text-primary-500 ",
+              footerActionLink: "primary-text-gradient hover:text-primary-500",
             },
           }}
         >
