@@ -5,7 +5,7 @@ import Link from "next/link";
 interface Props {
   imgUrl: string;
   alt: string;
-  value: string | number;
+  value?: string | number;
   title: string;
   textStyle?: string;
   href?: string;
