@@ -11,6 +11,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { useTheme } from "@/context/ThemeProvider";
@@ -21,17 +22,15 @@ import { usePathname } from "next/navigation";
 
 interface Props {
   questionId: string;
-  userId:string;
+  userId: string;
 }
 
-const Answer = ({ questionId,userId }: Props) => {
+const Answer = ({ questionId, userId }: Props) => {
   const [isSubmitting, setisSubmitting] = useState(false);
   const editorRef = useRef(null);
   const { mode } = useTheme();
 
-
-
-    const pathname = usePathname()
+  const pathname = usePathname();
 
   const form = useForm<z.infer<typeof answerSchema>>({
     resolver: zodResolver(answerSchema),
@@ -40,24 +39,22 @@ const Answer = ({ questionId,userId }: Props) => {
     },
   });
 
-
-
   async function handleCreateAnswer(data: z.infer<typeof answerSchema>) {
+    console.log(data);
     setisSubmitting(true);
     try {
       await createAnswer({
-      content: data.answer,
-      author:userId,
-      question: questionId,
-      path: pathname
-      })
+        content: data.answer,
+        author: userId,
+        question: questionId,
+        path: pathname,
+      });
       console.log(data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setisSubmitting(false);
     }
-    finally{
-        setisSubmitting(false)
-      }
   }
 
   return (
@@ -90,7 +87,10 @@ const Answer = ({ questionId,userId }: Props) => {
             control={form.control}
             name="answer"
             render={({ field }) => (
-              <FormItem className="flex w-full flex-col gap-3">
+              <FormItem className="flex w-full flex-col ">
+                <FormLabel className="paragraph-semibold background-light900_dark300 text-dark400_light800">
+                Detailed explanation of your Answer <span className="text-primary-500">*</span>
+                </FormLabel>
                 <FormControl className="mt-3.5">
                   <Editor
                     apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}

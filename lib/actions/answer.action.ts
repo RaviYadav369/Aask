@@ -1,3 +1,4 @@
+'use server'
 import Answer from "@/database/answer.model";
 import { connectToDb } from "../mongoose";
 import { CreateAnswerParams } from "./shared.types";
@@ -10,8 +11,9 @@ export async function createAnswer(params: CreateAnswerParams) {
     const { content, author, question, path } = params;
     console.log(params);
     
-    const newAnswer = new Answer({ content, author, question, path });
-    await Question.findByIdAndUpdate({ $push: { answers: newAnswer._id } });
+    const newAnswer = await Answer.create({ content, author, question, path });
+    
+    await Question.findByIdAndUpdate(question,{ $push: { answers: newAnswer._id } });
     revalidatePath(path);
     return newAnswer;
   } catch (error: any) {
