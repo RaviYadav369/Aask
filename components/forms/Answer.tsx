@@ -40,7 +40,6 @@ const Answer = ({ questionId, userId }: Props) => {
   });
 
   async function handleCreateAnswer(data: z.infer<typeof answerSchema>) {
-    console.log(data);
     setisSubmitting(true);
     try {
       await createAnswer({
@@ -49,19 +48,20 @@ const Answer = ({ questionId, userId }: Props) => {
         question: questionId,
         path: pathname,
       });
-      console.log(data);
     } catch (error) {
       console.log(error);
     } finally {
       setisSubmitting(false);
+      // @ts-ignore
+      editorRef.current.setContent("");
     }
   }
 
   return (
-    <div>
+    <div className="my-5">
       <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
         <h4 className="paragraph-semibold text-dark400_light800">
-          Write Your asnwer here
+          Write Your answer here
         </h4>
         <Button
           className="btn light-border-2 text-primary-500 dark:text-primary-500 gap-1.5 px-4 py-2.5 shadow-none"
@@ -89,7 +89,6 @@ const Answer = ({ questionId, userId }: Props) => {
             render={({ field }) => (
               <FormItem className="flex w-full flex-col ">
                 <FormLabel className="paragraph-semibold background-light900_dark300 text-dark400_light800">
-                Detailed explanation of your Answer <span className="text-primary-500">*</span>
                 </FormLabel>
                 <FormControl className="mt-3.5">
                   <Editor

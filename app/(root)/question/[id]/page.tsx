@@ -10,13 +10,18 @@ import React from "react";
 import { getUserById } from "@/lib/actions/user.action";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
+import AnswerCard from "@/components/card/AnswerCard";
+import Filter from "@/components/shared/Filter";
+import { AnswerFilters } from "@/constants/filters";
+import { getAllAnswersById } from "@/lib/actions/answer.action";
 
 const page = async ({ params }: any) => {
   const result = await getAllQuestionsById({ questionId: params.id });
-  //   console.log(result);
   const { userId } = auth();
   if (!userId) return redirect("/sign-in");
   const userResult = await getUserById({ userId });
+  const ansResult = await getAllAnswersById({ questionId: params.id })
+  console.log(ansResult);
 
   return (
     <>
@@ -69,6 +74,24 @@ const page = async ({ params }: any) => {
       <div className="mt-8 flex flex-wrap gap-5">
         {result.tags.map((tag: any) => (
           <Tags key={tag._id} _id={tag._id} name={tag.name} showCount={false} />
+        ))}
+      </div>
+      <div className="mt-5">
+        <div className="flex-between items-center my-5">
+          <h3 className="h3-semibold primary-text-gradient  ">
+            {result.answers.length} Answers
+          </h3>
+          <Filter filters={AnswerFilters} otherClasses="mr-2"  />
+        </div>
+        {ansResult.map((answer: any) => (
+          <AnswerCard
+            _id={answer._id}
+            content={answer.content}
+            upvotes={answer.upvotes.length}
+            downvotes={answer.downvotes.length}
+            author={answer.author}
+            createdAt={answer.createdAt}
+          />
         ))}
       </div>
       <Answer questionId={params.id} userId={userResult._id} />

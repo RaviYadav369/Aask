@@ -6,6 +6,7 @@ import Tag from "@/database/tag.model";
 import { CreateQuestionParams, GetQuestionByIdParams, GetQuestionsParams } from "./shared.types";
 import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
+import Answer from "@/database/answer.model";
 
 export async function createQuestion(params: CreateQuestionParams) {
   try {

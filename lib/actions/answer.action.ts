@@ -21,3 +21,17 @@ export async function createAnswer(params: CreateAnswerParams) {
     throw error;
   }
 }
+
+export async function getAllAnswersById(params: any) {
+  try {
+    connectToDb();
+    const { questionId } = params;
+    const answers = await Answer.find({ question: questionId })
+      .populate("author")
+      .sort({ createdAt: -1 })
+      return answers;
+  } catch (error: any) {
+    console.log(error);
+    throw error;
+}
+}

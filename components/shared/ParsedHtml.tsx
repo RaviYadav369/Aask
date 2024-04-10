@@ -35,7 +35,7 @@ const ParsedHtml = ({data}:Props) => {
   }, [])
   
   return (
-    <div className='text-dark200_light900'>
+    <div className='text-dark200_light900 my-5'>
       {parse(data)}
     </div>
   )
