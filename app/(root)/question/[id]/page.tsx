@@ -86,6 +86,7 @@ const page = async ({ params }: any) => {
         {ansResult.map((answer: any) => (
           <AnswerCard
             _id={answer._id}
+            key={answer._id}
             content={answer.content}
             upvotes={answer.upvotes.length}
             downvotes={answer.downvotes.length}

@@ -1,7 +1,7 @@
 import React from "react";
 import Metric from "../shared/Metric";
-import { formatNumber, getTimeStamp } from "@/lib/utils";
-import Link from "next/link";
+import { getTimeStamp } from "@/lib/utils";
+
 import ParsedHtml from "../shared/ParsedHtml";
 
 interface Props {
@@ -27,7 +27,7 @@ const AnswerCard = ({
 }: Props) => {
   return (
     <>
-      <div className="pb-5 mb-5 border-b-2 border-dark-300" >
+      <div className="pb-5 mb-5 border-b-2 dark:border-dark-300" >
         <div className="flex w-full flex-row justify-between gap-5 sm:items-center sm:gap-2">
           <div className="flex items-center justify-start gap-1">
               <Metric
