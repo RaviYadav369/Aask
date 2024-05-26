@@ -5,9 +5,10 @@ import { sidebarLinks } from "@/constants";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { SignedOut } from "@clerk/nextjs";
+import { SignedOut,SignedIn, useAuth } from "@clerk/nextjs";
 
 const LeftSidebar = () => {
+  const { userId} = useAuth();
   const pathname = usePathname();
   return (
     <section className="background-light900_dark200 light-border sticky left-0 top-0 h-screen flex flex-col justify-between overflow-y-auto p-6 pt-36 shadow-light-300 dark:shadow-none max-sm:hidden lg:w-[266px] custom-scrollbar ">
@@ -16,6 +17,15 @@ const LeftSidebar = () => {
           const isActive =
             (pathname.includes(link.route) && link.route.length > 1) ||
             pathname === link.route;
+            if(link.route === '/profile'){
+              if(userId){
+
+                link.route = `${link.route}/${userId}`
+              }
+              else{
+                return null
+              }
+            } 
           return (
             <Link
               href={link.route}
@@ -51,12 +61,20 @@ const LeftSidebar = () => {
 
           <Link href="/sign-up">
             <Button className="small-medium btn-tertiary light-border-2 min-h-[41px] w-full rounded-lg px-4 py-3 shadow-none text-dark400_light900">
-            <Image src='/assets/icons/sign-up.svg' alt="sign-up"width={20} height={20} className="invert-colors lg:hidden" />
+            <Image src='/assets/icons/suitcase.svg' alt="sign-out"width={20} height={20} className="invert-colors lg:hidden" />
               <span className="max-lg:hidden">Sign Up </span>
             </Button>
           </Link>
         </div>
       </SignedOut>
+      <SignedIn>
+      <Link href="/sign-out">
+            <Button className="small-medium btn-tertiary light-border-2 min-h-[41px] w-full rounded-lg px-4 py-3 shadow-none text-dark400_light900">
+            <Image src='/assets/icons/sign-up.svg' alt="sign-up"width={20} height={20} className="invert-colors lg:hidden" />
+              <span className="max-lg:hidden">Logout </span>
+            </Button>
+          </Link>
+      </SignedIn>
     </section>
   );
 };

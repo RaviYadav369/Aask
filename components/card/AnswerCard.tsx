@@ -44,9 +44,7 @@ const AnswerCard = ({
         </div>
         <ParsedHtml data={content} />
       </div>
-      <div className="">
 
-      </div>
 
     </>
   );

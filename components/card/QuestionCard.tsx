@@ -13,6 +13,7 @@ interface Props {
   }[];
   author: {
     _id: string;
+    clerkId:string;
     name: string;
     picture: string;
   };
@@ -51,16 +52,18 @@ const QuestionCard = ({
           <Tags key={tag._id} _id={tag._id} name={tag.name} />
         ))}
       </div>
-      <div className="flex-between mt-6 w-full flex-wrap gap-3">
+      <div className="flex-between mt-6 w-full flex-wrap ">
         <Metric
           imgUrl={author.picture}
           alt="user"
           value={author.name}
           title={`- asked ${getTimeStamp(createdAt)}`}
-          href={`/profile/${author._id}`}
+          href={`/profile/${author.clerkId}`}
           isAuthor
           textStyle="body-medium text-dark400_light700"
         />
+        <div className="flex-between gap-3">
+
         <Metric
           imgUrl="assets/icons/like.svg"
           alt="upvotes"
@@ -82,6 +85,7 @@ const QuestionCard = ({
           title=" Views"
           textStyle="small-medium text-dark400_light800"
         />
+        </div>
       </div>
     </div>
   );

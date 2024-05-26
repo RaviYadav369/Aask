@@ -30,7 +30,7 @@ const UserCard = async ({ user }: Props) => {
           height={100}
           className="rounded-full"
         />
-        <div className="mt-4 text-center">
+        <div className="mt-4 text-center text-dark500_light500">
           {user.name}
           <p className="h3-bold text-dark500_light500 mt-2">@{user.username}</p>
         </div>

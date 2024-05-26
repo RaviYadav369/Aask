@@ -2,14 +2,15 @@
 
 import User from "@/database/user.model";
 import { connectToDb } from "../mongoose";
-import { CreateUserParams,DeleteUserParams,GetAllUsersParams,UpdateUserParams } from "./shared.types";
+import { CreateUserParams,DeleteUserParams,GetAllUsersParams,GetUserByIdParams,UpdateUserParams } from "./shared.types";
 import { revalidatePath } from "next/cache";
+import Question from "@/database/question.model";
+import Answer from "@/database/answer.model";
 
 export async function getUserById(params: any) {
   try {
     connectToDb();
     const { userId } = params;
-    // const userId = '12345'
     const user = await User.findOne({clerkId: userId});
     return user;
   } catch (error:any) {
@@ -74,5 +75,23 @@ export async function getAllUsers(params:GetAllUsersParams) {
     console.log(error);
     throw error;
     
+  }
+}
+
+export async function getUserInfo(params: GetUserByIdParams) {
+  try {
+    connectToDb();
+    const { userId } = params;
+    const user = await User.findOne({clerkId:userId});
+    if(!user){
+      throw new Error("User not found")
+    }
+    const totalQuestion = await  Question.countDocuments({author:user._id});
+    const totalAnswer = await Answer.countDocuments({author:user._id});
+    return {user,totalQuestion,totalAnswer};
+  }
+  catch (error: any) {
+    console.log(error);
+    throw error;
   }
 }

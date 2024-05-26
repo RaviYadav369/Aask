@@ -21,7 +21,7 @@ const page = async ({ params }: any) => {
   if (!userId) return redirect("/sign-in");
   const userResult = await getUserById({ userId });
   const ansResult = await getAllAnswersById({ questionId: params.id })
-  console.log(ansResult);
+  // console.log(ansResult);
 
   return (
     <>

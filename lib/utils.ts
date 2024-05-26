@@ -44,3 +44,9 @@ export const formatNumber = (n: number): string => {
     return n.toString();
   }
 };
+
+export const getMonthAndYear = (date: Date): string => {
+  const month = date.toLocaleString("default", { month: "long" }); 
+  const year = date.getFullYear();
+  return `${month} ${year}`;
+};

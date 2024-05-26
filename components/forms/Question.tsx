@@ -63,7 +63,7 @@ const Question = ({mongoUserId}:Props) => {
     finally{
       setisSubmitting(false)
     }
-    console.log(values);
+    // console.log(values);
   }
   
 
@@ -134,7 +134,7 @@ const Question = ({mongoUserId}:Props) => {
             name="explanation"
             render={({ field }) => (
               <FormItem className="flex w-full flex-col gap-3">
-                <FormLabel className="paragraph-semibold background-light900_dark300 text-dark400_light800">
+                <FormLabel className="paragraph-semibold text-dark400_light800">
                   Detailed explanation of your problem{" "}
                   <span className="text-primary-500">*</span>{" "}
                 </FormLabel>
