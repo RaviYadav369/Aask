@@ -10,17 +10,16 @@ import React from "react";
 import { getUserById } from "@/lib/actions/user.action";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-import AnswerCard from "@/components/card/AnswerCard";
-import Filter from "@/components/shared/Filter";
-import { AnswerFilters } from "@/constants/filters";
 import { getAllAnswersById } from "@/lib/actions/answer.action";
+import AllAnswers from "@/components/shared/AllAnswers";
+import Votes from "@/components/shared/Votes";
 
 const page = async ({ params }: any) => {
   const result = await getAllQuestionsById({ questionId: params.id });
   const { userId } = auth();
   if (!userId) return redirect("/sign-in");
-  const userResult = await getUserById({ userId });
-  const ansResult = await getAllAnswersById({ questionId: params.id })
+  const mongoUser = await getUserById({ userId });
+  const ansResult = await getAllAnswersById({ questionId: params.id });
   // console.log(ansResult);
 
   return (
@@ -42,7 +41,19 @@ const page = async ({ params }: any) => {
               {result.author.name}
             </p>
           </Link>
-          <div className="flex justify-end">Vote</div>
+          <div className="flex justify-end">
+            <Votes 
+            type="question"
+            itemId={JSON.stringify(result._id)}
+            userId={JSON.stringify(mongoUser._id)}
+            upvotes={result.upvotes.length}
+            hasupVoted={result.upvotes.includes(mongoUser._id)}
+            downvotes={result.downvotes.length}
+            hasdownVoted={result.downvotes.includes(mongoUser._id)}
+            hasSaved={mongoUser?.saved.includes(result._id)}
+
+            />
+          </div>
         </div>
         <h2 className="h2-semibold text-dark200_light900 mt-3.5">
           {result.title}
@@ -76,26 +87,13 @@ const page = async ({ params }: any) => {
           <Tags key={tag._id} _id={tag._id} name={tag.name} showCount={false} />
         ))}
       </div>
-      <div className="mt-5">
-        <div className="flex-between items-center my-5">
-          <h3 className="h3-semibold primary-text-gradient  ">
-            {result.answers.length} Answers
-          </h3>
-          <Filter filters={AnswerFilters} otherClasses="mr-2"  />
-        </div>
-        {ansResult.map((answer: any) => (
-          <AnswerCard
-            _id={answer._id}
-            key={answer._id}
-            content={answer.content}
-            upvotes={answer.upvotes.length}
-            downvotes={answer.downvotes.length}
-            author={answer.author}
-            createdAt={answer.createdAt}
-          />
-        ))}
-      </div>
-      <Answer questionId={params.id} userId={userResult._id} />
+      
+        <AllAnswers
+          questionId={result._id}
+          userId={mongoUser._id}
+          totalAnswers={result.answers.length}
+        />
+      <Answer questionId={params.id} userId={mongoUser._id} />
     </>
   );
 };

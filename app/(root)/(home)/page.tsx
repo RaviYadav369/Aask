@@ -41,15 +41,14 @@ import Link from "next/link";
 //     upvotes: 1080000,
 //     viewed: 7000005,
 //     answers: [
-    
+
 //     ],
 //     createdAt:new Date('2022-03-20T15:45:00Z'),
 //   },
 // ];
-export  default async function Home() {
-  const result = await getAllQuestions({})
+export default async function Home() {
+  const result = await getAllQuestions({});
   // console.log(result?.questions)
-  
 
   return (
     <>
@@ -77,30 +76,30 @@ export  default async function Home() {
       </div>
       <HomeFilter />
       <div className="mt-10 flex w-full flex-col gap-6">
-        {result?.questions?.length ?
-         result?.questions.map((question) => (
+        {result?.questions?.length ? (
+          result?.questions.map((question) => (
             <QuestionCard
-            key={question._id}
-            _id={question._id}
-            title={question.title}
-            tags={question.tags}
-            author={question.author}
-            upvotes={question.upvotes.length}
-            views={question.views}
-            answers={question.answers}
-            createdAt={question.createdAt}
-
+              key={question._id}
+              _id={question._id}
+              title={question.title}
+              tags={question.tags}
+              author={question.author}
+              upvotes={question.upvotes}
+              views={question.views}
+              answers={question.answers}
+              createdAt={question.createdAt}
             />
           ))
-          : <NoResult 
-          title="There is no question to show"
-          description="Be the first to break the silence! 🚀 Ask a Question and kickstart the
+        ) : (
+          <NoResult
+            title="There is no question to show"
+            description="Be the first to break the silence! 🚀 Ask a Question and kickstart the
           discussion. our query could be the next big thing others learn from. Get
           involved! 💡"
-          link='/ask-question'
-          linkTitle='Ask a Question'
-
-          />}
+            link="/ask-question"
+            linkTitle="Ask a Question"
+          />
+        )}
       </div>
     </>
   );

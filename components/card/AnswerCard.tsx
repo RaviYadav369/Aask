@@ -6,6 +6,7 @@ import ParsedHtml from "../shared/ParsedHtml";
 
 interface Props {
   _id: string;
+  clerkId?:string | null;
   content: string;
   upvotes: number;
   downvotes: number;
@@ -20,6 +21,7 @@ interface Props {
 const AnswerCard = ({
   _id,
   content,
+  clerkId,
   upvotes,
   downvotes,
   author,

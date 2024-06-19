@@ -41,7 +41,7 @@ export const formatNumber = (n: number): string => {
   } else if (n >= 1e3) {
     return (n / 1e3).toFixed(1).replace(/\.0$/, "") + "K";
   } else {
-    return n.toString();
+    return n.toString(); 
   }
 };
 

@@ -7,6 +7,8 @@ import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getMonthAndYear } from "@/lib/utils";
 import { ProfileLink } from "@/components/shared/ProfileLink";
+import QuestionTab from "@/components/shared/QuestionTab";
+import AnswerTab from "@/components/shared/AnswerTab";
 
 const page = async ({ params, searchParams }: URLProps) => {
   const { userId: clerkId } = auth();
@@ -66,13 +68,23 @@ const page = async ({ params, searchParams }: URLProps) => {
       <div className="mt-10 flex gap-10">
         <Tabs defaultValue="top-posts" className="flex-1">  
           <TabsList className="background-light800_dark400 min-h-[42px] p-1">
-            <TabsTrigger value="top-posts" className="tab ">Top Posts</TabsTrigger>
-            <TabsTrigger value="answers" className="tab ">Answers</TabsTrigger>
+            <TabsTrigger value="top-posts" className="tab">Top Posts</TabsTrigger>
+            <TabsTrigger value="answers" className="tab">Answers</TabsTrigger>
           </TabsList>
           <TabsContent value="top-posts">
-            Posts
+           <QuestionTab
+           searchParams={searchParams}
+           userId={userInfo.user._id}
+           clerkId={params.id}
+           />
           </TabsContent>
-          <TabsContent value="answers">Answers</TabsContent>
+          <TabsContent value="answers">
+            <AnswerTab
+            searchParams={searchParams}
+            userId={userInfo.user._id}
+            clerkId={clerkId}
+            />
+          </TabsContent>
         </Tabs>
       </div>
     </>
