@@ -3,16 +3,19 @@ import Metric from "../shared/Metric";
 import { getTimeStamp } from "@/lib/utils";
 
 import ParsedHtml from "../shared/ParsedHtml";
+import EditDeleteIcons from "../shared/EditDeleteIcons";
+import { SignedIn } from "@clerk/nextjs";
 
 interface Props {
   _id: string;
-  clerkId?:string | null;
+  clerkId?: string | null;
   content: string;
-  upvotes: number;
+  upvotes: string[];
   downvotes: number;
   author: {
     _id: string;
     name: string;
+    clerkId:string;
     picture: string;
   };
   createdAt: Date;
@@ -27,27 +30,40 @@ const AnswerCard = ({
   author,
   createdAt,
 }: Props) => {
+  const showEditDelete = clerkId && clerkId === author.clerkId
   return (
     <>
-      <div className="pb-5 mb-5 border-b-2 dark:border-dark-300" >
-        <div className="flex w-full flex-row justify-between gap-5 sm:items-center sm:gap-2">
-          <div className="flex items-center justify-start gap-1">
-              <Metric
-                imgUrl={author.picture}
-                alt="user"
-                value={author.name}
-                title={`- replied ${getTimeStamp(createdAt)}`}
-                href={`/profile/${author._id}`}
-                isAuthor
-                textStyle="body-medium text-dark400_light700"
-              />
-             
+      <div className="card-wrapper mb-5 rounded-[10px] p-9 sm:px-11">
+        <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
+          <div>
+            <Metric
+              imgUrl={author.picture}
+              alt="user"
+              value={author.name}
+              title={`- replied ${getTimeStamp(createdAt)}`}
+              href={`/profile/${clerkId}`}
+              isAuthor
+              textStyle="body-medium text-dark400_light700"
+            />
+            <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
+              {getTimeStamp(createdAt)}
+            </span>
           </div>
+          <SignedIn>
+          {showEditDelete && (
+
+            <EditDeleteIcons
+            type="answer"
+            itemId = {JSON.stringify(_id)}            
+            />
+          )}
+        </SignedIn>
         </div>
-        <ParsedHtml data={content} />
+
+        <div className=" mt-6 w-full flex-wrap ">
+          <ParsedHtml data={content} />
+        </div>
       </div>
-
-
     </>
   );
 };

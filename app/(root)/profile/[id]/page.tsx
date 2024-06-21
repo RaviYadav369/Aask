@@ -5,7 +5,7 @@ import { SignedIn, auth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getMonthAndYear } from "@/lib/utils";
+import { getMonthAndYear, removeProtocol } from "@/lib/utils";
 import { ProfileLink } from "@/components/shared/ProfileLink";
 import QuestionTab from "@/components/shared/QuestionTab";
 import AnswerTab from "@/components/shared/AnswerTab";
@@ -28,11 +28,11 @@ const page = async ({ params, searchParams }: URLProps) => {
             <h2 className="h2-bold text-dark100_light900">{userInfo.user.name}</h2>
             <p className="paragraph-regular text-dark200_light800">@{userInfo.user.username}</p>
             <div className="flex mt-5 flex-wrap items-center justify-start gap-5 ">
-              {userInfo.user?.portfolioWebsite && (
+              {userInfo.user?.portfoliowebsite && (
                 <ProfileLink 
                 imgUrl="/assets/icons/link.svg"
-                href={userInfo.user.portfolioWebsite}
-                title='Portfolio'
+                href={userInfo.user.portfoliowebsite}
+                title={removeProtocol(userInfo.user.portfoliowebsite)}
 
                 />
               )}
@@ -56,7 +56,7 @@ const page = async ({ params, searchParams }: URLProps) => {
         <div className="flex justify-end max-sm:mb-5 max-sm:w-full sm:mt-3">
           <SignedIn>
             {clerkId === userInfo.user.clerkId && (
-              <Link href="/profile/edit">
+              <Link href={`/profile/edit/${clerkId}`}>
                 <Button className="paragraph-medium btn-secondary text-dark300_light900 min-h-[46px] min-w-[175px] px-4 py-3">
                   Edit Profile
                 </Button>

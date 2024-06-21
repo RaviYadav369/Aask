@@ -21,51 +21,61 @@ import { Input } from "@/components/ui/input";
 import { questionSchema } from "@/lib/validations";
 import { Badge } from "../ui/badge";
 import Image from "next/image";
-import { createQuestion } from "@/lib/actions/question.action";
-import { useRouter,usePathname } from "next/navigation";
+import { createQuestion, editQuestion } from "@/lib/actions/question.action";
+import { useRouter, usePathname } from "next/navigation";
 import { useTheme } from "@/context/ThemeProvider";
-
-const type:any = "create";
 
 interface Props {
   mongoUserId: string;
+  type: string;
+  qusetionDetails?: any;
 }
 
-const Question = ({mongoUserId}:Props) => {
+const Question = ({ mongoUserId, type, qusetionDetails }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
-  const {mode} = useTheme()
+  const { mode } = useTheme();
   const editorRef = useRef(null);
   const [isSubmitting, setisSubmitting] = useState(false);
-
+  const parseQuestionDetails = JSON.parse(qusetionDetails);
+  const groupedTags = parseQuestionDetails.tags.map((tag: any) => tag.name);
   const form = useForm<z.infer<typeof questionSchema>>({
     resolver: zodResolver(questionSchema),
     defaultValues: {
-      title: "",
-      explanation: "",
-      tags: [],
+      title: parseQuestionDetails.title || "",
+      explanation: parseQuestionDetails.content || "",
+      tags: groupedTags || [],
     },
   });
- async function onSubmit(values: z.infer<typeof questionSchema>) {
+  async function onSubmit(values: z.infer<typeof questionSchema>) {
     setisSubmitting(true);
     try {
-     await createQuestion({
-      title:values.title,
-      content:values.explanation,
-      tags:values.tags,
-      author: JSON.parse(mongoUserId),  
-      path: pathname
-     })
-     router.push('/')
+      if(type ==='edit'){
+        await editQuestion({
+          questionId:parseQuestionDetails._id,
+          title:values.title,
+          content:values.explanation,
+          path:pathname
+        })
+
+      router.push(`/question/${parseQuestionDetails._id}`)
+      }
+      else{
+
+        await createQuestion({
+          title: values.title,
+          content: values.explanation,
+          tags: values.tags,
+          author: JSON.parse(mongoUserId),
+          path: pathname,
+        });
+        router.push("/");
+      }
     } catch (error) {
-      
+    } finally {
+      setisSubmitting(false);
     }
-    finally{
-      setisSubmitting(false)
-    }
-    // console.log(values);
   }
-  
 
   const handleInputKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
@@ -142,12 +152,12 @@ const Question = ({mongoUserId}:Props) => {
                   <Editor
                     apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}
                     onInit={(evt, editor) => {
-                      // @ts-ignore 
+                      // @ts-ignore
                       editorRef.current = editor;
                     }}
-                    initialValue=""
+                    initialValue={parseQuestionDetails.content || ""}
                     onBlur={field.onBlur}
-                    onEditorChange={(content)=>field.onChange(content)}
+                    onEditorChange={(content) => field.onChange(content)}
                     init={{
                       height: 350,
                       menubar: false,
@@ -174,8 +184,8 @@ const Question = ({mongoUserId}:Props) => {
                         "alignright alignjustify | bullist numlist | ",
                       content_style:
                         "body { font-family:Helvetica,Arial,sans-serif; font-size:16px }",
-                        skin: mode === "dark" ? "oxide-dark" : "oxide",
-                        content_css: mode === "dark" ? "dark" : "light",
+                      skin: mode === "dark" ? "oxide-dark" : "oxide",
+                      content_css: mode === "dark" ? "dark" : "light",
                     }}
                   />
                 </FormControl>
@@ -199,6 +209,7 @@ const Question = ({mongoUserId}:Props) => {
                   <>
                     <Input
                       placeholder="Add tags..."
+                      disabled={type === 'edit' }
                       onKeyDown={(e) => handleInputKeyDown(e, field)}
                       className="no-focus paragraph-regular text-dark300_light700 min-h-[56px] border background-light900_dark300"
                     />
@@ -208,16 +219,18 @@ const Question = ({mongoUserId}:Props) => {
                           <Badge
                             key={tag}
                             className="subtle-medium background-light800_dark300 text-light400_light500 flex items-center justify-center gap-2 rounded-md px-4 py-2 capitalize border-none"
-                            onClick={() => handleTagRemove(tag, field)}
+                            onClick={() =>type !=='edit' ? handleTagRemove(tag, field): ()=>{}}
                           >
                             {tag}
-                            <Image
-                              src="/assets/icons/close.svg"
-                              width={12}
-                              height={12}
-                              alt="close icon"
-                              className="cursor-pointer object-contain invert-0 dark:invert"
-                            />
+                           {type !=='edit' &&(
+                             <Image
+                             src="/assets/icons/close.svg"
+                             width={12}
+                             height={12}
+                             alt="close icon"
+                             className="cursor-pointer object-contain invert-0 dark:invert"
+                           />
+                           )}
                           </Badge>
                         ))}
                       </div>
@@ -238,11 +251,9 @@ const Question = ({mongoUserId}:Props) => {
             disabled={isSubmitting}
           >
             {isSubmitting ? (
-              <>
-              {type === "edit" ? "Editing..." : "Posting..."}</>
+              <>{type === "edit" ? "Editing..." : "Posting..."}</>
             ) : (
-              <>
-              {type === "edit" ? "Edit Question" : "Ask Question"}</>
+              <>{type === "edit" ? "Edit Question" : "Ask Question"}</>
             )}
           </Button>
         </form>

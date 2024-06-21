@@ -50,3 +50,7 @@ export const getMonthAndYear = (date: Date): string => {
   const year = date.getFullYear();
   return `${month} ${year}`;
 };
+
+export const removeProtocol=(url:string):string=> {
+  return url.replace(/https?:\/\/|\/$/g, '').replace(/^www\./, '');
+}
