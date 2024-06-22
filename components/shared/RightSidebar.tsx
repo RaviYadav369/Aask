@@ -2,24 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import Tags from "./Tags";
+import { gethotQuestions } from "@/lib/actions/question.action";
+import { GetPopularTags } from "@/lib/actions/tag.action";
 
-const RightSidebar = () => {
-  const hotQuestions = [
-    { _id: "1", title: "how do I use express as a custom server in nextjs" },
-    { _id: "2", title: "how do I use express as a custom server in nextjs" },
-    { _id: "3", title: "how do I use express as a custom server in nextjs" },
-    { _id: "4", title: "how do I use express as a custom server in nextjs" },
-    { _id: "5", title: "how do I use express as a custom server in nextjs" },
-  ];
-
-  const tags = [
-    { _id: '1', name: "javascript", totalQuestions: 5 },
-    { _id: '2', name: "HTML", totalQuestions: 5 },
-    { _id: '3', name: "CSS", totalQuestions: 5 },
-    { _id: '4', name: "Nodejs", totalQuestions: 5 },
-    { _id: '5', name: "Nextjs", totalQuestions: 5 },
-    { _id: '6', name: "React", totalQuestions: 5 },
-  ];
+const RightSidebar = async () => {
+  const hotQuestions = await gethotQuestions();
+  const tags = await GetPopularTags()
 
   return (
     <section className="background-light900_dark200 light-border sticky right-0 top-0 h-screen flex flex-col  overflow-y-auto p-6 pt-36 shadow-light-300 dark:shadow-none border-1 max-xl:hidden lg:w-[350px] custom-scrollbar ">

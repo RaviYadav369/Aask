@@ -28,40 +28,41 @@ import { useTheme } from "@/context/ThemeProvider";
 interface Props {
   mongoUserId: string;
   type: string;
-  qusetionDetails?: any;
+  qusetionDetails?: string;
 }
 
 const Question = ({ mongoUserId, type, qusetionDetails }: Props) => {
+  console.log(qusetionDetails);
   const router = useRouter();
   const pathname = usePathname();
   const { mode } = useTheme();
   const editorRef = useRef(null);
   const [isSubmitting, setisSubmitting] = useState(false);
-  const parseQuestionDetails = JSON.parse(qusetionDetails);
-  const groupedTags = parseQuestionDetails.tags.map((tag: any) => tag.name);
+
+  const parseQuestionDetails = qusetionDetails && JSON.parse(qusetionDetails || "")
+  const groupedTags = parseQuestionDetails && parseQuestionDetails.tags.map((tag: any) => tag.name);
+
   const form = useForm<z.infer<typeof questionSchema>>({
     resolver: zodResolver(questionSchema),
     defaultValues: {
-      title: parseQuestionDetails.title || "",
-      explanation: parseQuestionDetails.content || "",
+      title: parseQuestionDetails?.title || "",
+      explanation: parseQuestionDetails?.content || "",
       tags: groupedTags || [],
     },
   });
   async function onSubmit(values: z.infer<typeof questionSchema>) {
     setisSubmitting(true);
     try {
-      if(type ==='edit'){
+      if (type === "edit") {
         await editQuestion({
-          questionId:parseQuestionDetails._id,
-          title:values.title,
-          content:values.explanation,
-          path:pathname
-        })
+          questionId: parseQuestionDetails._id,
+          title: values.title,
+          content: values.explanation,
+          path: pathname,
+        });
 
-      router.push(`/question/${parseQuestionDetails._id}`)
-      }
-      else{
-
+        router.push(`/question/${parseQuestionDetails._id}`);
+      } else {
         await createQuestion({
           title: values.title,
           content: values.explanation,
@@ -155,7 +156,7 @@ const Question = ({ mongoUserId, type, qusetionDetails }: Props) => {
                       // @ts-ignore
                       editorRef.current = editor;
                     }}
-                    initialValue={parseQuestionDetails.content || ""}
+                    initialValue={parseQuestionDetails?.content || ""}
                     onBlur={field.onBlur}
                     onEditorChange={(content) => field.onChange(content)}
                     init={{
@@ -209,7 +210,7 @@ const Question = ({ mongoUserId, type, qusetionDetails }: Props) => {
                   <>
                     <Input
                       placeholder="Add tags..."
-                      disabled={type === 'edit' }
+                      disabled={type === "edit"}
                       onKeyDown={(e) => handleInputKeyDown(e, field)}
                       className="no-focus paragraph-regular text-dark300_light700 min-h-[56px] border background-light900_dark300"
                     />
@@ -219,18 +220,22 @@ const Question = ({ mongoUserId, type, qusetionDetails }: Props) => {
                           <Badge
                             key={tag}
                             className="subtle-medium background-light800_dark300 text-light400_light500 flex items-center justify-center gap-2 rounded-md px-4 py-2 capitalize border-none"
-                            onClick={() =>type !=='edit' ? handleTagRemove(tag, field): ()=>{}}
+                            onClick={() =>
+                              type !== "edit"
+                                ? handleTagRemove(tag, field)
+                                : () => {}
+                            }
                           >
                             {tag}
-                           {type !=='edit' &&(
-                             <Image
-                             src="/assets/icons/close.svg"
-                             width={12}
-                             height={12}
-                             alt="close icon"
-                             className="cursor-pointer object-contain invert-0 dark:invert"
-                           />
-                           )}
+                            {type !== "edit" && (
+                              <Image
+                                src="/assets/icons/close.svg"
+                                width={12}
+                                height={12}
+                                alt="close icon"
+                                className="cursor-pointer object-contain invert-0 dark:invert"
+                              />
+                            )}
                           </Badge>
                         ))}
                       </div>

@@ -1,5 +1,6 @@
 "use client";
 import { downvoteAnswer, upvoteAnswer } from "@/lib/actions/answer.action";
+import { viewQuestion } from "@/lib/actions/interaction.action";
 import {
   downvoteQuestion,
   upvoteQuestion,
@@ -8,7 +9,7 @@ import { toggleSavedQuestion } from "@/lib/actions/user.action";
 import { formatNumber } from "@/lib/utils";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 interface Props {
   type: string;
   itemId: string;
@@ -78,13 +79,20 @@ const Votes = ({
     }
   };
 
-  const handleSave = async() => {
+  const handleSave = async () => {
     await toggleSavedQuestion({
-        userId: JSON.parse(userId),
-        questionId: JSON.parse(itemId),
-        path:pathname
-    })
+      userId: JSON.parse(userId),
+      questionId: JSON.parse(itemId),
+      path: pathname,
+    });
   };
+
+  useEffect(() => {
+    viewQuestion({
+      questionId: JSON.parse(itemId),
+      userId: userId ? JSON.parse(userId) : undefined,
+    });
+  }, [itemId, userId, pathname, router]);
 
   return (
     <>
@@ -104,7 +112,9 @@ const Votes = ({
               onClick={() => handlevote("upvote")}
             />
             <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
-              <p className="subtle-medium text-dark400_light900">{ formatNumber(upvotes)}</p>
+              <p className="subtle-medium text-dark400_light900">
+                {formatNumber(upvotes)}
+              </p>
             </div>
           </div>
           <div className="flex-center gap-1.5">
@@ -121,7 +131,9 @@ const Votes = ({
               onClick={() => handlevote("downvote")}
             />
             <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
-              <p className="subtle-medium text-dark400_light900">{formatNumber(downvotes)} </p>
+              <p className="subtle-medium text-dark400_light900">
+                {formatNumber(downvotes)}{" "}
+              </p>
             </div>
           </div>
         </div>

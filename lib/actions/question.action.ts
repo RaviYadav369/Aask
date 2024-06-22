@@ -97,19 +97,19 @@ export async function upvoteQuestion(params: QuestionVoteParams) {
     }
     const question = await Question.findByIdAndUpdate(questionId, updateQuery, {
       new: true,
-    })
+    });
 
     if (!question) {
       throw new Error("Question not found");
     }
     revalidatePath(path);
   } catch (error: any) {
-    console.log(error)
-    throw error
+    console.log(error);
+    throw error;
   }
 }
 
-export async function downvoteQuestion (params:QuestionVoteParams){
+export async function downvoteQuestion(params: QuestionVoteParams) {
   try {
     connectToDb();
     const { questionId, userId, hasupVoted, hasdownVoted, path } = params;
@@ -119,7 +119,7 @@ export async function downvoteQuestion (params:QuestionVoteParams){
       updateQuery = { $pull: { downvotes: userId } };
     } else if (hasupVoted) {
       updateQuery = {
-        $pull: { upvotes: userId }, 
+        $pull: { upvotes: userId },
         $push: { downvotes: userId },
       };
     } else {
@@ -127,46 +127,58 @@ export async function downvoteQuestion (params:QuestionVoteParams){
     }
     const question = await Question.findByIdAndUpdate(questionId, updateQuery, {
       new: true,
-    })
+    });
 
     if (!question) {
       throw new Error("Question not found");
     }
     revalidatePath(path);
   } catch (error: any) {
-    console.log(error)
-    throw error
+    console.log(error);
+    throw error;
   }
 }
 
-export async function editQuestion(params:EditQuestionParams ) {
+export async function editQuestion(params: EditQuestionParams) {
   try {
     connectToDb();
     const { questionId, title, content, path } = params;
-    const question = await Question.findById(questionId).populate('tags')
-    if(!question) throw new Error('Question Not Found')
-    question.title = title
-    question.content = content
-    await question.save()
-    revalidatePath(path)
-  }
-  catch (error: any) {
-    console.log(error)
-    throw error
+    const question = await Question.findById(questionId).populate("tags");
+    if (!question) throw new Error("Question Not Found");
+    question.title = title;
+    question.content = content;
+    await question.save();
+    revalidatePath(path);
+  } catch (error: any) {
+    console.log(error);
+    throw error;
   }
 }
-export async function deleteQuestion(params:DeleteQuestionParams ) {
+export async function deleteQuestion(params: DeleteQuestionParams) {
   try {
     connectToDb();
     const { questionId, path } = params;
-    await Question.deleteOne({_id: questionId})
-    await Answer.deleteMany({ question: questionId })
-    await Tag.updateMany({ questions: questionId }, { $pull: { questions: questionId } })
-    revalidatePath(path)
-
+    await Question.deleteOne({ _id: questionId });
+    await Answer.deleteMany({ question: questionId });
+    await Tag.updateMany(
+      { questions: questionId },
+      { $pull: { questions: questionId } }
+    );
+    revalidatePath(path);
+  } catch (error: any) {
+    console.log(error);
+    throw error;
   }
-  catch (error: any) {
-    console.log(error)
-    throw error
+}
+export async function gethotQuestions() {
+  try {
+    connectToDb();
+    const hotQuestions = await Question.find({})
+      .sort({ views: -1, upvotes: -1 })
+      .limit(5);
+    return  hotQuestions 
+  } catch (error: any) {
+    console.log(error);
+    throw error;
   }
 }

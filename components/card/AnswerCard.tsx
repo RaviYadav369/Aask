@@ -33,7 +33,7 @@ const AnswerCard = ({
   const showEditDelete = clerkId && clerkId === author.clerkId
   return (
     <>
-      <div className="card-wrapper mb-5 rounded-[10px] p-9 sm:px-11">
+      <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
         <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
           <div>
             <Metric
