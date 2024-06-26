@@ -12,6 +12,7 @@ export const connectToDb = async()=>{
         return console.log('Already connected to db');
         
     }
+    mongoose.set('debug', true);
     try {
         await mongoose.connect(process.env.MONGODB_URI,{
             dbName:'Aask'

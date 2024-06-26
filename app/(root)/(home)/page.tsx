@@ -2,10 +2,12 @@ import QuestionCard from "@/components/card/QuestionCard";
 import HomeFilter from "@/components/home/HomeFilter";
 import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
+import Pagination from "@/components/shared/Pagination";
 import LocalSearch from "@/components/shared/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import { HomePageFilters } from "@/constants/filters";
 import { getAllQuestions } from "@/lib/actions/question.action";
+import {  SearchParamsProps } from "@/types";
 import Link from "next/link";
 
 // const questions = [
@@ -46,8 +48,12 @@ import Link from "next/link";
 //     createdAt:new Date('2022-03-20T15:45:00Z'),
 //   },
 // ];
-export default async function Home() {
-  const result = await getAllQuestions({});
+export default async function Home({searchParams}:SearchParamsProps) {
+
+   const result = await getAllQuestions({
+    searchQuery: searchParams.q,
+    filter:searchParams.filter,
+   });
 
   return (
     <>
@@ -99,6 +105,13 @@ export default async function Home() {
             linkTitle="Ask a Question"
           />
         )}
+      </div>
+      <div className="mt-10 ">
+        <Pagination 
+        pageNumber={searchParams?.page ? +searchParams.page : 1} 
+        isNext={result?.isNext}
+
+        />
       </div>
     </>
   );

@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import qs from "query-string";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -41,16 +42,52 @@ export const formatNumber = (n: number): string => {
   } else if (n >= 1e3) {
     return (n / 1e3).toFixed(1).replace(/\.0$/, "") + "K";
   } else {
-    return n.toString(); 
+    return n.toString();
   }
 };
 
 export const getMonthAndYear = (date: Date): string => {
-  const month = date.toLocaleString("default", { month: "long" }); 
+  const month = date.toLocaleString("default", { month: "long" });
   const year = date.getFullYear();
   return `${month} ${year}`;
 };
 
-export const removeProtocol=(url:string):string=> {
-  return url.replace(/https?:\/\/|\/$/g, '').replace(/^www\./, '');
+export const removeProtocol = (url: string): string => {
+  return url.replace(/https?:\/\/|\/$/g, "").replace(/^www\./, "");
+};
+
+interface UrlQueryParams {
+  params: string;
+  Key: string;
+  value: string | null;
 }
+
+export const formUrlQuery = ({ params, Key, value }: UrlQueryParams) => {
+  const currentUrl = qs.parse(params);
+  currentUrl[Key] = value;
+  return qs.stringifyUrl(
+    {
+      url: window.location.pathname,
+      query: currentUrl,
+    },
+    {
+      skipNull: true,
+    }
+  );
+};
+
+interface removeKeyParams {
+  params: string;
+  Key: string;
+}
+export const removeKeyFromQuery = ({ params, Key }: removeKeyParams) => {
+  const currentUrl = qs.parse(params);
+  delete currentUrl[Key];
+  return qs.stringifyUrl(
+    {
+      url: window.location.pathname,
+      query: currentUrl,
+    },
+    { skipNull: true }
+  );
+};

@@ -14,6 +14,7 @@ import {
 import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
 import Answer from "@/database/answer.model";
+import { FilterQuery } from "mongoose";
 
 export async function createQuestion(params: CreateQuestionParams) {
   try {
@@ -50,11 +51,36 @@ export async function createQuestion(params: CreateQuestionParams) {
 export async function getAllQuestions(params: GetQuestionsParams) {
   try {
     connectToDb();
+    const { searchQuery, filter } = params;
+    const query: FilterQuery<typeof Question> = {};
+    if (searchQuery) {
+      query.$or = [
+        { title: { $regex: new RegExp(searchQuery, "i") } },
+        { content: { $regex: new RegExp(searchQuery, "i") } },
+      ];
+    }
+    let sortOptions = {};
+    switch (filter) {
+      case "newest":
+        sortOptions = { createdAt: -1 };
+        break;
+      case "recommended":
+        sortOptions = { createdAt: -1 };
+        break;
+      case "frequent":
+        sortOptions = { views: -1 };
+        break;
+      case "unanswered":
+        query.answers = { $size: 0 };
+        break;
 
-    const questions = await Question.find({})
+      default:
+        break;
+    }
+    const questions = await Question.find(query)
       .populate({ path: "tags", model: Tag })
       .populate({ path: "author", model: User })
-      .sort({ createdAt: -1 });
+      .sort(sortOptions);
     return { questions };
   } catch (error: any) {
     console.log(error);
@@ -176,7 +202,7 @@ export async function gethotQuestions() {
     const hotQuestions = await Question.find({})
       .sort({ views: -1, upvotes: -1 })
       .limit(5);
-    return  hotQuestions 
+    return hotQuestions;
   } catch (error: any) {
     console.log(error);
     throw error;

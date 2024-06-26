@@ -5,10 +5,14 @@ import NoResult from "@/components/shared/NoResult";
 import LocalSearch from "@/components/shared/search/LocalSearch";
 import { TagFilters } from "@/constants/filters";
 import { GetAllTags } from "@/lib/actions/tag.action";
+import { SearchParamsProps } from "@/types";
 import React from "react";
 
-const page = async () => {
-  const results = await GetAllTags({});
+const page = async ({searchParams}:SearchParamsProps) => {
+  const results = await GetAllTags({
+    searchQuery:searchParams.q,
+    filter:searchParams.filter
+  });
   
   return (
     <>
@@ -16,7 +20,7 @@ const page = async () => {
 
       <div className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <LocalSearch
-          route="/community"
+          route="/tags"
           iconPosition="left"
           imgSrc="/assets/icons/search.svg"
           placeholder="Search For amazing minds"

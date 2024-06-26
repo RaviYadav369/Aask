@@ -13,7 +13,7 @@ import { redirect } from "next/navigation";
 import AllAnswers from "@/components/shared/AllAnswers";
 import Votes from "@/components/shared/Votes";
 
-const page = async ({ params }: any) => {
+const page = async ({ params,searchParams }: any) => {
   const result = await getAllQuestionsById({ questionId: params.id });
   const { userId } = auth();
   if (!userId) return redirect("/sign-in");
@@ -89,6 +89,8 @@ const page = async ({ params }: any) => {
           questionId={result._id}
           userId={mongoUser._id}
           totalAnswers={result.answers.length}
+          page={searchParams?.page}
+          filter={searchParams?.filter}
         />
       <Answer questionId={params.id} userId={mongoUser._id} />
     </>

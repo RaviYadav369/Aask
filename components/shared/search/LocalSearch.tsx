@@ -1,9 +1,14 @@
 "use client";
 import { Input } from "@/components/ui/input";
+import { formUrlQuery, removeKeyFromQuery } from "@/lib/utils";
 import Image from "next/image";
-import React from "react";
-
-
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 interface Props {
   route: string;
@@ -20,6 +25,34 @@ const LocalSearch = ({
   placeholder,
   otherClasses,
 }: Props) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const query = searchParams.get("q");
+  const [search, setsearch] = useState(query || "");
+  useEffect(() => {
+    const delayDebounseFn = setTimeout(() => {
+      if (search) {
+        const newUrl = formUrlQuery({
+          params: searchParams.toString(),
+          Key: "q",
+          value: search,
+        });
+        router.push(newUrl, { scroll: false });
+      } else {
+        if (pathname === route) {
+          const newUrl = removeKeyFromQuery({
+            params: searchParams.toString(),
+            Key: "q",
+          }
+        );
+        router.push(newUrl, { scroll: false });
+        }
+      }
+    }, 500);
+    return () => clearTimeout(delayDebounseFn);
+  }, [search, query, route, pathname, searchParams, router]);
+
   return (
     <section className="flex md:flex-col max-sm:flex-col flex-1 gap-4">
       <div
@@ -37,9 +70,9 @@ const LocalSearch = ({
         <Input
           type="text"
           placeholder={placeholder}
-          value=""
-          onChange={() => {}}
-          className="paragraph-regular no-focus placeholder background-light800_darkgradient   border-none shadow-none outline-none "
+          value={search}
+          onChange={(e) => setsearch(e.target.value)}
+          className="paragraph-regular no-focus placeholder background-light800_darkgradient   border-none "
         />
         {iconPosition === "right" && (
           <Image
@@ -51,7 +84,6 @@ const LocalSearch = ({
           />
         )}
       </div>
-     
     </section>
   );
 };
