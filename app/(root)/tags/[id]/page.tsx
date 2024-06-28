@@ -1,27 +1,26 @@
 import QuestionCard from "@/components/card/QuestionCard";
+import HomeFilter from "@/components/home/HomeFilter";
 import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
 import Pagination from "@/components/shared/Pagination";
 import LocalSearch from "@/components/shared/search/LocalSearch";
-import { QuestionFilters } from "@/constants/filters";
-import { getSavedQuestions } from "@/lib/actions/user.action";
-import { SearchParamsProps } from "@/types";
-import { auth } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
+import { HomePageFilters } from "@/constants/filters";
+import { getQuestionByTagId } from "@/lib/actions/tag.action";
+import { URLProps } from "@/types";
+import Link from "next/link";
 
-export default async function Home({ searchParams }: SearchParamsProps) {
-  const { userId } = auth();
-  if (!userId) return null;
-  const result = await getSavedQuestions({
-    clerkId: userId,
+export default async function page({ params, searchParams }: URLProps) {
+  const result = await getQuestionByTagId({
+    tagId: params.id,
     searchQuery: searchParams.q,
-    filter: searchParams.filter,
-    page:searchParams.page ? +searchParams.page:1
+    page: searchParams.page ? +searchParams.page : 1,
   });
 
   return (
     <>
-      <h1 className="h1-bold text-dark100_light900">Saved QUESTION</h1>
-
+        <h1 className="h1-bold text-dark100_light900">{result.tagTitle}</h1>
+        
       <div className="mt-11 flex justify-between max-sm:flex-col sm:items-center gap-5">
         <LocalSearch
           route="/"
@@ -30,15 +29,10 @@ export default async function Home({ searchParams }: SearchParamsProps) {
           placeholder="Search For Questions"
           otherClasses="flex-1"
         />
-        <Filter
-          filters={QuestionFilters}
-          otherClasses="min-h-[56px] sm:min-w-[170px]"
-          containerClasses="max-md:flex"
-        />
       </div>
       <div className="mt-10 flex w-full flex-col gap-6">
         {result?.questions?.length ? (
-          result?.questions.map((question: any) => (
+          result?.questions.map((question:any) => (
             <QuestionCard
               key={question._id}
               _id={question._id}
@@ -53,7 +47,7 @@ export default async function Home({ searchParams }: SearchParamsProps) {
           ))
         ) : (
           <NoResult
-            title="There is no question saved to show"
+            title="There is no question to show"
             description="Be the first to break the silence! 🚀 Ask a Question and kickstart the
           discussion. our query could be the next big thing others learn from. Get
           involved! 💡"

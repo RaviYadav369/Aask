@@ -51,7 +51,10 @@ export async function createQuestion(params: CreateQuestionParams) {
 export async function getAllQuestions(params: GetQuestionsParams) {
   try {
     connectToDb();
-    const { searchQuery, filter } = params;
+    const { searchQuery, filter, page = 1, pageSize = 10 } = params;
+
+    const skipAmount = (page - 1) * pageSize;
+
     const query: FilterQuery<typeof Question> = {};
     if (searchQuery) {
       query.$or = [
@@ -80,8 +83,14 @@ export async function getAllQuestions(params: GetQuestionsParams) {
     const questions = await Question.find(query)
       .populate({ path: "tags", model: Tag })
       .populate({ path: "author", model: User })
+      .skip(skipAmount)
+      .limit(pageSize)
       .sort(sortOptions);
-    return { questions };
+
+      const totalQuestion = await Question.countDocuments(query)
+      const isNext = totalQuestion > skipAmount + questions.length
+
+    return { questions,isNext };
   } catch (error: any) {
     console.log(error);
   }

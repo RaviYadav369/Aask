@@ -7,7 +7,7 @@ import LocalSearch from "@/components/shared/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import { HomePageFilters } from "@/constants/filters";
 import { getAllQuestions } from "@/lib/actions/question.action";
-import {  SearchParamsProps } from "@/types";
+import { SearchParamsProps } from "@/types";
 import Link from "next/link";
 
 // const questions = [
@@ -48,12 +48,12 @@ import Link from "next/link";
 //     createdAt:new Date('2022-03-20T15:45:00Z'),
 //   },
 // ];
-export default async function Home({searchParams}:SearchParamsProps) {
-
-   const result = await getAllQuestions({
+export default async function Home({ searchParams }: SearchParamsProps) {
+  const result = await getAllQuestions({
     searchQuery: searchParams.q,
-    filter:searchParams.filter,
-   });
+    filter: searchParams.filter,
+    page: searchParams.page ? +searchParams.page : 1,
+  });
 
   return (
     <>
@@ -107,10 +107,9 @@ export default async function Home({searchParams}:SearchParamsProps) {
         )}
       </div>
       <div className="mt-10 ">
-        <Pagination 
-        pageNumber={searchParams?.page ? +searchParams.page : 1} 
-        isNext={result?.isNext}
-
+        <Pagination
+          pageNumber={searchParams?.page ? +searchParams.page : 1}
+          isNext={result!?.isNext}
         />
       </div>
     </>

@@ -7,6 +7,7 @@ import Image from "next/image";
 import { getTimeStamp } from "@/lib/utils";
 import ParsedHtml from "./ParsedHtml";
 import Votes from "./Votes";
+import Pagination from "./Pagination";
 
 interface Props {
   questionId: string;
@@ -25,8 +26,8 @@ const AllAnswers = async ({
 }: Props) => {
   const result = await getAllAnswersById({
     questionId,
-    page:page? +page:1,
-    sortBy:filter
+    page: page ? +page : 1,
+    sortBy: filter,
   });
 
   return (
@@ -63,21 +64,24 @@ const AllAnswers = async ({
                   </div>
                 </Link>
                 <div className="flex flex-end">
-                    <Votes 
-                      type="answer"
-                      itemId={JSON.stringify(answer._id)}
-                      userId={JSON.stringify(userId)}
-                      upvotes={answer.upvotes.length}
-                      hasupVoted={answer.upvotes.includes(userId)}
-                      downvotes={answer.downvotes.length}
-                      hasdownVoted={answer.downvotes.includes(userId)}
-                    />
+                  <Votes
+                    type="answer"
+                    itemId={JSON.stringify(answer._id)}
+                    userId={JSON.stringify(userId)}
+                    upvotes={answer.upvotes.length}
+                    hasupVoted={answer.upvotes.includes(userId)}
+                    downvotes={answer.downvotes.length}
+                    hasdownVoted={answer.downvotes.includes(userId)}
+                  />
                 </div>
               </div>
             </div>
             <ParsedHtml data={answer.content} />
           </article>
         ))}
+      </div>
+      <div className="mt-10 ">
+        <Pagination pageNumber={page ? +page : 1} isNext={result!.isNext} />
       </div>
     </div>
   );

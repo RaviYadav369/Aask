@@ -1,6 +1,7 @@
 'use server'
 import UserCard from "@/components/card/UserCard";
 import Filter from "@/components/shared/Filter";
+import Pagination from "@/components/shared/Pagination";
 import LocalSearch from "@/components/shared/search/LocalSearch";
 import { UserFilters } from "@/constants/filters";
 import { getAllUsers } from "@/lib/actions/user.action";
@@ -11,7 +12,8 @@ import React from "react";
 const page = async ({searchParams}:SearchParamsProps) => {
   const results = await getAllUsers({
     searchQuery:searchParams.q,
-    filter:searchParams.filter
+    filter:searchParams.filter,
+    page:searchParams.page ? +searchParams.page : 1
   });
   return (
     <>
@@ -47,6 +49,12 @@ const page = async ({searchParams}:SearchParamsProps) => {
           </div>
         )}
       </section>
+      <div className="mt-10 ">
+        <Pagination
+          pageNumber={searchParams?.page ? +searchParams.page : 1}
+          isNext={results!.isNext}
+        />
+      </div>
     </>
   );
 };
