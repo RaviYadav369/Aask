@@ -78,11 +78,11 @@ export const formUrlQuery = ({ params, Key, value }: UrlQueryParams) => {
 
 interface removeKeyParams {
   params: string;
-  Key: string;
+  Key: string[];
 }
 export const removeKeyFromQuery = ({ params, Key }: removeKeyParams) => {
   const currentUrl = qs.parse(params);
-  delete currentUrl[Key];
+  delete currentUrl[Key[0]];
   return qs.stringifyUrl(
     {
       url: window.location.pathname,

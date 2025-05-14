@@ -13,6 +13,8 @@ export const connectToDb = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
       dbName: "Aask",
+      serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
+      socketTimeoutMS: 45000
     });
     isConnected = true;
     console.log("Connected to db");
