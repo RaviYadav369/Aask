@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -9,10 +9,30 @@ import GlobalResult from "./GlobalResult";
 const GlobalSearch = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const searchContinerRef = useRef(null)
   const pathname = usePathname();
   const query = searchParams.get("q");
   const [search, setsearch] = useState(query || "");
   const [isOpen, setisOpen] = useState(false);
+
+  useEffect(()=>{
+    const handleOutsideClick = (event:any)=>{
+      if(searchContinerRef.current && 
+        //@ts-ignore
+        !searchContinerRef.current.contains(event.target)
+      ){
+        setisOpen(false)
+        setsearch('')
+      }
+    }
+    setisOpen(false)
+    document.addEventListener("click",handleOutsideClick)
+  return ()=>{
+    document.removeEventListener("click",handleOutsideClick)
+  }
+  }
+  ,[pathname])
+
   useEffect(() => {
     const delayDebounseFn = setTimeout(() => {
       if (search) {
@@ -37,7 +57,7 @@ const GlobalSearch = () => {
   }, [search, query, pathname, searchParams, router]);
 
   return (
-    <div className="relative w-full max-w-[600px] max-lg:hidden">
+    <div className="relative w-full max-w-[600px] max-lg:hidden" ref={searchContinerRef}>
       <div className="background-light800_darkgradient relative flex min-h-[56px] grow items-center gap-1 rounded-xl px-4">
         <Image
           src="/assets/icons/search.svg"

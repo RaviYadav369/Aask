@@ -34,6 +34,7 @@ const Filter = ({ filters, otherClasses, containerClasses }: Props) => {
         value: item,
       });
       router.push(newUrl, { scroll: false });
+      setActive('')
 
   }
   return (

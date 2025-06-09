@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input";
 import { formUrlQuery, removeKeyFromQuery } from "@/lib/utils";
 import Image from "next/image";
 import {
-  useParams,
   usePathname,
   useRouter,
   useSearchParams,
@@ -72,7 +71,7 @@ const LocalSearch = ({
           placeholder={placeholder}
           value={search}
           onChange={(e) => setsearch(e.target.value)}
-          className="paragraph-regular no-focus placeholder background-light800_darkgradient   border-none "
+          className="paragraph-regular no-focus text-dark400_light700 placeholder background-light800_darkgradient   border-none "
         />
         {iconPosition === "right" && (
           <Image

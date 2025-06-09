@@ -75,7 +75,7 @@ const Votes = ({
           path: pathname,
         });
       }
-      return;
+      // return;
     }
   };
 

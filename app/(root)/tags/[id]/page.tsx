@@ -1,14 +1,9 @@
 import QuestionCard from "@/components/card/QuestionCard";
-import HomeFilter from "@/components/home/HomeFilter";
-import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
 import Pagination from "@/components/shared/Pagination";
 import LocalSearch from "@/components/shared/search/LocalSearch";
-import { Button } from "@/components/ui/button";
-import { HomePageFilters } from "@/constants/filters";
 import { getQuestionByTagId } from "@/lib/actions/tag.action";
 import { URLProps } from "@/types";
-import Link from "next/link";
 
 export default async function page({ params, searchParams }: URLProps) {
   const result = await getQuestionByTagId({
