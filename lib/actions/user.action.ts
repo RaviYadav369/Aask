@@ -140,12 +140,16 @@ export async function getUserQuestionsById(params: GetUserStatsParams) {
     const skipAmount = (page - 1) * pageSize;
     const totalQuestions = await Question.countDocuments({ author: userId });
     const userQuestions = await Question.find({ author: userId })
-      .skip(skipAmount)
-      .limit(pageSize)
-      .sort({ views: -1, upvotes: -1 })
-      .populate("tags", "_id name")
-      .populate("author", "_id clerkId name picture");
-
+    .populate([{
+      path: "tags",
+      model: Tag, 
+      select: "_id name"
+    }])
+    .populate({ path: "author", model: User, select: "_id clerkId name picture" })
+    .skip(skipAmount)
+    .limit(pageSize)
+    .sort({  createdAt :-1, views: -1, upvotes: -1 })
+      
     const isNext = totalQuestions > skipAmount + userQuestions.length;
 
     return { totalQuestions, questions: userQuestions, isNext };
@@ -161,11 +165,10 @@ export async function getUserAnswersById(params: GetUserStatsParams) {
     const skipAmount = (page - 1) * pageSize;
     const totalAnswers = await Answer.countDocuments({ author: userId });
     const userAnswers = await Answer.find({ author: userId })
-      .skip(skipAmount)
-      .limit(pageSize)
-      .sort({ upvotes: -1 })
-      .populate("question", "_id title")
-      .populate("author", "_id clerkId name picture");
+    .populate({ path: "author", model: User, select: "_id clerkId name picture" })
+    .skip(skipAmount)
+    .limit(pageSize)
+    .sort({upvotes: -1 })
 
     const isNext = totalAnswers > skipAmount + userAnswers.length;
     
@@ -247,7 +250,7 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
         { path: "author", model: User, select: "_id clerkId name picture" },
       ],
     });
-
+console.log('get saved question',user)
     if (!user) {
       throw new Error("User is not Found");
     }

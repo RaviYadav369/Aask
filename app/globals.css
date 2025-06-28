@@ -53,6 +53,23 @@ body {
       .tab {
         @apply min-h-full dark:bg-dark-400 bg-light-800 text-light-500;
       }
+      .tab,.tab[data-state=active] {
+        --tw-bg-opacity: 1!important;
+        --tw-text-opacity: 1!important
+      }
+      .tab[data-state=active] {
+      background-color: rgb(255 241 230/var(--tw-bg-opacity))!important;
+      color: rgb(255 112 0/var(--tw-text-opacity))!important
+      }
+      :is(.dark .tab) {
+      --tw-bg-opacity: 1!important;
+      background-color: rgb(33 39 52/var(--tw-bg-opacity))!important
+      }
+
+    :is(.dark .tab[data-state=active]) {
+      --tw-bg-opacity: 1!important;
+      background-color: rgb(21 24 33/var(--tw-bg-opacity))!important
+    }
 }
 
   .no-focus {

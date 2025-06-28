@@ -21,7 +21,7 @@ const page = async ({ params,searchParams }: any) => {
 
   return (
     <>
-      <div className="flex w-full flex-col justify-start">
+      <div className="flex w-full flex-col justify-start overflow-hidden">
         <div className="flex w-full flex-row justify-between gap-5 sm:items-center sm:gap-2">
           <Link
             href={`profile/${result.author.clerkId}`}

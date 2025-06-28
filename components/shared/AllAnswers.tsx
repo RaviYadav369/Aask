@@ -38,27 +38,27 @@ const AllAnswers = async ({
       </div>
       <div>
         {result.answers.map((answer) => (
-          <article key={answer._id} className="light-border border-b py-10">
+          <article key={answer._id} className="light-border border-b pt-10">
             <div className="flex items-center justify-between">
-              <div className="mb-8 flex flex-1 justify-between gap-5 sm:flex-row sm:items-center sm:gap-2 ">
+              <div className=" flex flex-1 justify-between gap-5 sm:flex-row sm:items-center sm:gap-2 ">
                 <Link
                   href={`/profile/${answer.author.clerkId}`}
-                  className="flex flex-1 items-start  gap-1 sm:items-center "
+                  className="flex items-start  gap-1 sm:items-center "
                 >
                   <Image
                     src={answer.author.picture}
-                    width={18}
-                    height={18}
+                    width={24}
+                    height={24}
                     alt="profile"
                     className="rounded-full object-cover max-sm:mt-0.5"
                   />
                   <div className="flex flex-col sm:flex-row sm:items-center">
-                    <p className="body-semibold text-dark300_light700">
+                    <p className="body-semibold text-lg text-dark300_light700">
                       {answer.author.name}
                     </p>
                     <p className="small-regular text-light400_light500 mt-0.5 line-clamp-1 ml-0.5">
-                      <span className="max-sm:hidden">
-                        -<span>answered {getTimeStamp(answer.createdAt)}</span>
+                      <span className="max-sm:hidden ">
+                        - <span>Answered {getTimeStamp(answer.createdAt)}</span>
                       </span>
                     </p>
                   </div>
