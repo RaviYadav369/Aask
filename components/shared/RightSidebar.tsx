@@ -10,7 +10,7 @@ const RightSidebar = async () => {
   const tags = await GetPopularTags()
 
   return (
-    <section className="background-light900_dark200 light-border sticky right-0 top-0 h-screen flex flex-col  overflow-y-auto p-6 pt-36 shadow-light-300 dark:shadow-none border-1 max-xl:hidden lg:w-[350px] custom-scrollbar ">
+    <section className="background-light900_dark200 light-border sticky right-0 top-0 h-screen flex flex-col  overflow-y-auto p-6 pt-36 shadow-light-300 dark:shadow-none border max-xl:hidden lg:w-[350px] custom-scrollbar ">
       <div>
         <h3 className="h3-bold text-dark200_light900">Top Questions</h3>
         <div className="flex mt-7 w-full flex-col gap-[30px]">

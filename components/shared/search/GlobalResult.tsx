@@ -84,7 +84,7 @@ const GlobalResult = () => {
                       alt="tag"
                       width={18}
                       height={18}
-                      className="invert-color mt-1 object-contain"
+                      className="invert-colors mt-1 object-contain"
                     />
                     <div>
                       <p className="text-dark200_light800 body-medium line-clamp-1 ">

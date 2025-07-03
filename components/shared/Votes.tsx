@@ -94,7 +94,7 @@ const Votes = ({
         userId: userId ? JSON.parse(userId) : undefined,
       });
     }
-  }, [itemId, userId, pathname, router]);
+  }, [itemId, userId, pathname, router,type]);
 
   return (
     <>

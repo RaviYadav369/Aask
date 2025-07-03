@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
@@ -9,29 +9,29 @@ import GlobalResult from "./GlobalResult";
 const GlobalSearch = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const searchContinerRef = useRef(null)
+  const searchContinerRef = useRef(null);
   const pathname = usePathname();
   const query = searchParams.get("q");
   const [search, setsearch] = useState(query || "");
   const [isOpen, setisOpen] = useState(false);
 
-  useEffect(()=>{
-    const handleOutsideClick = (event:any)=>{
-      if(searchContinerRef.current && 
-        //@ts-ignore
+  useEffect(() => {
+    const handleOutsideClick = (event: any) => {
+      if (
+        searchContinerRef.current &&
+        // @ts-ignore
         !searchContinerRef.current.contains(event.target)
-      ){
-        setisOpen(false)
-        setsearch('')
+      ) {
+        setisOpen(false);
+        setsearch("");
       }
-    }
-    setisOpen(false)
-    document.addEventListener("click",handleOutsideClick)
-  return ()=>{
-    document.removeEventListener("click",handleOutsideClick)
-  }
-  }
-  ,[pathname])
+    };
+    setisOpen(false);
+    document.addEventListener("click", handleOutsideClick);
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, [pathname]);
 
   useEffect(() => {
     const delayDebounseFn = setTimeout(() => {
@@ -46,8 +46,7 @@ const GlobalSearch = () => {
         if (query) {
           const newUrl = removeKeyFromQuery({
             params: searchParams.toString(),
-            Key: ['global','type'],
-            
+            Key: ["global", "type"],
           });
           router.push(newUrl, { scroll: false });
         }
@@ -57,7 +56,10 @@ const GlobalSearch = () => {
   }, [search, query, pathname, searchParams, router]);
 
   return (
-    <div className="relative w-full max-w-[600px] max-lg:hidden" ref={searchContinerRef}>
+    <div
+      className="relative w-full max-w-[600px] max-lg:hidden"
+      ref={searchContinerRef}
+    >
       <div className="background-light800_darkgradient relative flex min-h-[56px] grow items-center gap-1 rounded-xl px-4">
         <Image
           src="/assets/icons/search.svg"
@@ -73,7 +75,7 @@ const GlobalSearch = () => {
           onChange={(e) => {
             setsearch(e.target.value);
             if (!isOpen) setisOpen(true);
-            if(e.target.value ==='' &&  isOpen) setisOpen(false)
+            if (e.target.value === "" && isOpen) setisOpen(false);
           }}
           className="paragraph-regular no-focus placeholder text-dark400_light700 background-light800_darkgradient border-none shadow-none outline-none "
         />
