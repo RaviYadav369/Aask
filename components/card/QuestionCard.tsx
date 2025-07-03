@@ -3,8 +3,7 @@ import Link from "next/link";
 import Tags from "../shared/Tags";
 import Metric from "../shared/Metric";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
-import { SignedIn, auth } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
+import { SignedIn } from "@clerk/nextjs";
 import EditDeleteIcons from "../shared/EditDeleteIcons";
 
 interface Props {
