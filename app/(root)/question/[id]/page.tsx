@@ -13,12 +13,14 @@ import { redirect } from "next/navigation";
 import AllAnswers from "@/components/shared/AllAnswers";
 import Votes from "@/components/shared/Votes";
 
-const page = async ({ params,searchParams }: any) => {
+const page = async ({ params, searchParams }: any) => {
   const result = await getAllQuestionsById({ questionId: params.id });
+  console.log("Question ID", result);
   const { userId } = auth();
-  if (!userId) return redirect("/sign-in");
-  const mongoUser = await getUserById({ userId });
-
+  let mongoUser;
+  if (userId) {
+    mongoUser = await getUserById({ userId });
+  }
   return (
     <>
       <div className="flex w-full flex-col justify-start overflow-hidden">
@@ -39,16 +41,15 @@ const page = async ({ params,searchParams }: any) => {
             </p>
           </Link>
           <div className="flex justify-end">
-            <Votes 
-            type="question"
-            itemId={JSON.stringify(result._id)}
-            userId={JSON.stringify(mongoUser._id)}
-            upvotes={result.upvotes.length}
-            hasupVoted={result.upvotes.includes(mongoUser._id)}
-            downvotes={result.downvotes.length}
-            hasdownVoted={result.downvotes.includes(mongoUser._id)}
-            hasSaved={mongoUser?.saved.includes(result._id)}
-
+            <Votes
+              type="question"
+              itemId={JSON.stringify(result._id)}
+              userId={JSON.stringify(mongoUser?._id)}
+              upvotes={result.upvotes.length}
+              hasupVoted={result.upvotes.includes(mongoUser?._id)}
+              downvotes={result.downvotes.length}
+              hasdownVoted={result.downvotes.includes(mongoUser?._id)}
+              hasSaved={mongoUser?.saved.includes(result._id)}
             />
           </div>
         </div>
@@ -84,15 +85,15 @@ const page = async ({ params,searchParams }: any) => {
           <Tags key={tag._id} _id={tag._id} name={tag.name} showCount={false} />
         ))}
       </div>
-      
-        <AllAnswers
-          questionId={result._id}
-          userId={mongoUser._id}
-          totalAnswers={result.answers.length}
-          page={searchParams?.page}
-          filter={searchParams?.filter}
-        />
-      <Answer questionId={params.id} userId={mongoUser._id} />
+
+      <AllAnswers
+        questionId={result._id}
+        userId={mongoUser?._id}
+        totalAnswers={result.answers.length}
+        page={searchParams?.page}
+        filter={searchParams?.filter}
+      />
+      <Answer questionId={params.id} userId={mongoUser?._id} />
     </>
   );
 };

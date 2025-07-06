@@ -80,6 +80,9 @@ const Votes = ({
   };
 
   const handleSave = async () => {
+     if (!userId) {
+      return;
+    }
     await toggleSavedQuestion({
       userId: JSON.parse(userId),
       questionId: JSON.parse(itemId),
