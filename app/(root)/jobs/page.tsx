@@ -1,7 +1,5 @@
-import QuestionCard from "@/components/card/QuestionCard";
 import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
-import Pagination from "@/components/shared/Pagination";
 import LocalSearch from "@/components/shared/search/LocalSearch";
 import { QuestionFilters } from "@/constants/filters";
 

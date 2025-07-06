@@ -9,7 +9,6 @@ import Link from "next/link";
 import React from "react";
 import { getUserById } from "@/lib/actions/user.action";
 import { auth } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
 import AllAnswers from "@/components/shared/AllAnswers";
 import Votes from "@/components/shared/Votes";
 
