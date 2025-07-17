@@ -9,6 +9,7 @@ import { getMonthAndYear, removeProtocol } from "@/lib/utils";
 import { ProfileLink } from "@/components/shared/ProfileLink";
 import QuestionTab from "@/components/shared/QuestionTab";
 import AnswerTab from "@/components/shared/AnswerTab";
+import Stats from "@/components/shared/Stats";
 
 const page = async ({ params, searchParams }: URLProps) => {
   const { userId: clerkId } = auth();
@@ -25,31 +26,35 @@ const page = async ({ params, searchParams }: URLProps) => {
             className="rounded-full object-cover"
           />
           <div className="mt-3">
-            <h2 className="h2-bold text-dark100_light900">{userInfo.user.name}</h2>
-            <p className="paragraph-regular text-dark200_light800">@{userInfo.user.username}</p>
+            <h2 className="h2-bold text-dark100_light900">
+              {userInfo.user.name}
+            </h2>
+            <p className="paragraph-regular text-dark200_light800">
+              @{userInfo.user.username}
+            </p>
             <div className="flex mt-5 flex-wrap items-center justify-start gap-5 ">
               {userInfo.user?.portfoliowebsite && (
-                <ProfileLink 
-                imgUrl="/assets/icons/link.svg"
-                href={userInfo.user.portfoliowebsite}
-                title={removeProtocol(userInfo.user.portfoliowebsite)}
-
+                <ProfileLink
+                  imgUrl="/assets/icons/link.svg"
+                  href={userInfo.user.portfoliowebsite}
+                  title={removeProtocol(userInfo.user.portfoliowebsite)}
                 />
               )}
               {userInfo.user?.location && (
-                <ProfileLink 
-                imgUrl="/assets/icons/location.svg"
-                title={userInfo.user.location}
-
+                <ProfileLink
+                  imgUrl="/assets/icons/location.svg"
+                  title={userInfo.user.location}
                 />
               )}
-              <ProfileLink 
-              imgUrl="/assets/icons/calendar.svg"
-              title={`Joined ${getMonthAndYear(userInfo.user.joinedAt)}`}
+              <ProfileLink
+                imgUrl="/assets/icons/calendar.svg"
+                title={`Joined ${getMonthAndYear(userInfo.user.joinedAt)}`}
               />
             </div>
             {userInfo.user?.bio && (
-            <p className="paragraph-regular text-dark400_light800 mt-8">{userInfo.user.bio}</p>
+              <p className="paragraph-regular text-dark400_light800 mt-5">
+                {userInfo.user.bio}
+              </p>
             )}
           </div>
         </div>
@@ -65,28 +70,39 @@ const page = async ({ params, searchParams }: URLProps) => {
           </SignedIn>
         </div>
       </div>
+      <div className="mt-5">
+        <Stats
+          totalquestions={userInfo.totalQuestion}
+          totalAnswers={userInfo.totalAnswer}
+          reputation={userInfo.user.reputation}
+        />
+      </div>
       <div className="mt-10 flex gap-10">
-        <Tabs defaultValue="top-posts" className="flex-1">  
+        <Tabs defaultValue="top-posts" className="flex-1">
           <TabsList className="inline-flex h-9 items-center justify-center rounded-lg bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 background-light800_dark400 min-h-[42px] p-1">
-            <TabsTrigger value="top-posts" className="tab">Top Posts</TabsTrigger>
-            <TabsTrigger value="answers" className="tab">Answers</TabsTrigger>
+            <TabsTrigger value="top-posts" className="tab">
+              Top Posts
+            </TabsTrigger>
+            <TabsTrigger value="answers" className="tab">
+              Answers
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="top-posts">
-          <div className="mt-10 flex w-full flex-col gap-6">
-           <QuestionTab
-           searchParams={searchParams}
-           userId={userInfo.user._id}
-           clerkId={clerkId}
-           />
-           </div>
+            <div className="mt-10 flex w-full flex-col gap-6">
+              <QuestionTab
+                searchParams={searchParams}
+                userId={userInfo.user._id}
+                clerkId={clerkId}
+              />
+            </div>
           </TabsContent>
           <TabsContent value="answers">
-          <div className="mt-10 flex w-full flex-col gap-6">
-            <AnswerTab
-            searchParams={searchParams}
-            userId={userInfo.user._id}
-            clerkId={clerkId}
-            />
+            <div className="mt-10 flex w-full flex-col gap-6">
+              <AnswerTab
+                searchParams={searchParams}
+                userId={userInfo.user._id}
+                clerkId={clerkId}
+              />
             </div>
           </TabsContent>
         </Tabs>
