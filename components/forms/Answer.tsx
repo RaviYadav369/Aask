@@ -1,6 +1,6 @@
 /* eslint-disable tailwindcss/no-custom-classname */
 "use client";
-import React, { useId, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { answerSchema } from "@/lib/validations";
 import * as z from "zod";
@@ -32,7 +32,6 @@ const Answer = ({ questionId, userId }: Props) => {
   const { mode } = useTheme();
 
   const pathname = usePathname();
-  const router = useRouter();
   const form = useForm<z.infer<typeof answerSchema>>({
     resolver: zodResolver(answerSchema),
     defaultValues: {
