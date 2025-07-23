@@ -1,11 +1,12 @@
 /* eslint-disable tailwindcss/no-custom-classname */
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useId, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { answerSchema } from "@/lib/validations";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Editor } from "@tinymce/tinymce-react";
+import toast from "react-hot-toast";
 import {
   Form,
   FormControl,
@@ -18,7 +19,7 @@ import { useTheme } from "@/context/ThemeProvider";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import { createAnswer } from "@/lib/actions/answer.action";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 interface Props {
   questionId: string;
@@ -31,7 +32,7 @@ const Answer = ({ questionId, userId }: Props) => {
   const { mode } = useTheme();
 
   const pathname = usePathname();
-
+  const router = useRouter();
   const form = useForm<z.infer<typeof answerSchema>>({
     resolver: zodResolver(answerSchema),
     defaultValues: {
@@ -41,14 +42,18 @@ const Answer = ({ questionId, userId }: Props) => {
 
   async function handleCreateAnswer(data: z.infer<typeof answerSchema>) {
     setisSubmitting(true);
+    if (!userId) toast.error("User is not Signed");
     try {
+      if (!userId) return;
       await createAnswer({
         content: data.answer,
         author: userId,
         question: questionId,
         path: pathname,
       });
+      toast.success("Answer is created");
     } catch (error) {
+      toast.error("Error in creating Answer");
       console.log(error);
     } finally {
       setisSubmitting(false);
@@ -88,8 +93,7 @@ const Answer = ({ questionId, userId }: Props) => {
             name="answer"
             render={({ field }) => (
               <FormItem className="flex w-full flex-col ">
-                <FormLabel className="paragraph-semibold background-light900_dark300 text-dark400_light800">
-                </FormLabel>
+                <FormLabel className="paragraph-semibold background-light900_dark300 text-dark400_light800"></FormLabel>
                 <FormControl className="mt-3.5">
                   <Editor
                     apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}

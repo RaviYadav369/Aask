@@ -24,6 +24,7 @@ import Image from "next/image";
 import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { useRouter, usePathname } from "next/navigation";
 import { useTheme } from "@/context/ThemeProvider";
+import toast from "react-hot-toast";
 
 interface Props {
   mongoUserId: string;
@@ -39,8 +40,11 @@ const Question = ({ mongoUserId, type, qusetionDetails }: Props) => {
   const editorRef = useRef(null);
   const [isSubmitting, setisSubmitting] = useState(false);
 
-  const parseQuestionDetails = qusetionDetails && JSON.parse(qusetionDetails || "")
-  const groupedTags = parseQuestionDetails && parseQuestionDetails.tags.map((tag: any) => tag.name);
+  const parseQuestionDetails =
+    qusetionDetails && JSON.parse(qusetionDetails || "");
+  const groupedTags =
+    parseQuestionDetails &&
+    parseQuestionDetails.tags.map((tag: any) => tag.name);
 
   const form = useForm<z.infer<typeof questionSchema>>({
     resolver: zodResolver(questionSchema),
@@ -52,7 +56,9 @@ const Question = ({ mongoUserId, type, qusetionDetails }: Props) => {
   });
   async function onSubmit(values: z.infer<typeof questionSchema>) {
     setisSubmitting(true);
+    if (!mongoUserId) toast.error("User is not Sign In");
     try {
+      if (!mongoUserId) return;
       if (type === "edit") {
         await editQuestion({
           questionId: parseQuestionDetails._id,
@@ -60,7 +66,7 @@ const Question = ({ mongoUserId, type, qusetionDetails }: Props) => {
           content: values.explanation,
           path: pathname,
         });
-
+        toast.success("Edit Question is Successful");
         router.push(`/question/${parseQuestionDetails._id}`);
       } else {
         await createQuestion({
@@ -70,9 +76,11 @@ const Question = ({ mongoUserId, type, qusetionDetails }: Props) => {
           author: JSON.parse(mongoUserId),
           path: pathname,
         });
+        toast.success("Question is created");
         router.push("/");
       }
     } catch (error) {
+      toast.error("Error in creating Question");
     } finally {
       setisSubmitting(false);
     }
